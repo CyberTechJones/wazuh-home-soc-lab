@@ -1,0 +1,57 @@
+# Credentials and secrets
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.p12
+secrets/
+credentials/
+private/
+
+# Wazuh sensitive files
+client.keys
+authd.pass
+wazuh-passwords.txt
+wazuh-install-files/
+*.keystore
+
+# Virtual machine files
+*.vdi
+*.vmdk
+*.vhd
+*.vhdx
+*.ova
+*.ovf
+*.vmem
+*.vmss
+*.vmsn
+*.qcow2
+*.iso
+
+# Packet captures
+*.pcap
+*.pcapng
+*.cap
+
+# Raw logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.dmp
+
+# Private or unredacted evidence
+screenshots/private/
+screenshots/unredacted/
+evidence/raw/
+evidence/private/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
