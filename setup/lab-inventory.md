@@ -8,8 +8,8 @@ This inventory documents the virtual machines and security components used in my
 
 * Virtualization platform: Oracle VirtualBox
 * Environment type: Three-VM home SOC lab
-* Virtual network type: [TO BE VERIFIED]
-* Internet access during testing: [TO BE VERIFIED]
+* Virtual network type: Oracle VirtualBox Host-only network with NAT access on selected VMs
+* Internet access during testing: Available to the Wazuh and Kali Linux VMs through separate NAT adapters
 * Primary purpose: Defensive security monitoring, detection validation, and SOC investigation practice
 ---
 **Wazuh SIEM**
@@ -18,10 +18,10 @@ The Wazuh virtual machine operates as the Security Information and Event Managem
 
 * Asset ID: SIEM-01
 * VM name: wazuh-server
-* Hostname: [TO BE VERIFIED]
+* Hostname: wazuh-server
 * IP address: [REDACTED]
-* Operating system: [TO BE VERIFIED]
-* Wazuh version: [TO BE VERIFIED]
+* Operating system: ubuntu 24.10
+* Wazuh version: Version 4.14
 * Primary role: Security Information and Event Management platform
 * Current status: Configured
 
@@ -38,12 +38,12 @@ The Windows virtual machine serves as the primary monitored endpoint. The Wazuh 
 
 * Asset ID: ENDPOINT-01
 * VM name: win-endpoint
-* Hostname: [TO BE VERIFIED]
+* Hostname: win-endpoint
 * IP address: [REDACTED]
-* Operating system: [TO BE VERIFIED]
+* Operating system: windows 11
 * Wazuh agent installed: Yes
-* Wazuh agent status: [ACTIVE/TO BE VERIFIED]
-* Wazuh agent version: [TO BE VERIFIED]
+* Wazuh agent status: [ACTIVE]
+* Wazuh agent version: [VERIFIED]
 * Sysmon status: [PLANNED/INSTALLED/VALIDATED]
 * Primary role: Monitored Windows workstation
 * Current status: Configured
@@ -63,12 +63,12 @@ The Kali Linux virtual machine generates safe, controlled security activity agai
 
 * Asset ID: TEST-01
 * VM name: kali-attacker
-* Hostname: [TO BE VERIFIED]
+* Hostname: kali-attacker
 * IP address: [REDACTED]
-* Operating system: Kali Linux [VERSION TO BE VERIFIED]
+* Operating system: Version 2026.2
 * Wazuh agent installed: Yes
-* Wazuh agent status: [ACTIVE/TO BE VERIFIED]
-* Wazuh agent version: [TO BE VERIFIED]
+* Wazuh agent status: [ACTIVE]
+* Wazuh agent version: [VERIFIED]
 * Primary role: Authorized security-testing and monitored Linux system
 * Current status: Configured
 
@@ -82,7 +82,7 @@ The Kali Linux virtual machine generates safe, controlled security activity agai
 ---
 **Asset Summary**
 
-sas
+![Asset summary table](./asset-summary.png)
 
 **Data Flow Summary**
 
