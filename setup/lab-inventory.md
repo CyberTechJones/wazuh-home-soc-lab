@@ -8,7 +8,11 @@ This inventory documents the virtual machines and security components used in my
 
 * Virtualization platform: Oracle VirtualBox
 * Environment type: Three-VM home SOC lab
-* Virtual network type: Oracle VirtualBox Host-only network with NAT access on selected VMs
+* Virtual network type: Oracle VirtualBox Host-only network with NAT access on selected VMs (see screenshots below)
+![Kali Network](./kali-network.png)
+![Win Network](./win-network.png)
+![Wazuh Network](./wazuh-network.png)
+
 * Internet access during testing: Available to the Wazuh and Kali Linux VMs through separate NAT adapters
 * Primary purpose: Defensive security monitoring, detection validation, and SOC investigation practice
 ---
@@ -24,6 +28,9 @@ The Wazuh virtual machine operates as the Security Information and Event Managem
 * Wazuh version: Version 4.14
 * Primary role: Security Information and Event Management platform
 * Current status: Configured
+
+![agent](./agents.png)
+![wazuh](./wazuh.png)
 
 **Primary Functions**
 
