@@ -51,7 +51,7 @@ The Windows virtual machine serves as the primary monitored endpoint. The Wazuh 
 * Wazuh agent installed: Yes
 * Wazuh agent status: [ACTIVE]
 * Wazuh agent version: [VERIFIED]
-* Sysmon status: [PLANNED/INSTALLED/VALIDATED]
+* Sysmon status: [INSTALLED]
 * Primary role: Monitored Windows workstation
 * Current status: Configured
 
