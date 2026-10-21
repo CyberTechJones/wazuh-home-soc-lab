@@ -1,67 +1,69 @@
-Home SOC Lab Architecture
-Architecture Overview
-This project uses three virtual machines connected through an isolated virtual network. Each virtual machine has a specific role in the detection and investigation workflow.
+# Home SOC Lab Architecture
+**Architecture Overview**
 
-The environment is designed for authorized defensive cybersecurity testing and portfolio development.
+This lab uses Oracle VirtualBox to host an isolated three-VM security monitoring environment. The Kali Linux VM functions as the authorized attack-simulation system, the Windows VM acts as the monitored endpoint, and the Wazuh VM operates as the SIEM. Security activity generated against the Windows endpoint is recorded and forwarded to Wazuh for detection, analysis, and investigation.
 
-Lab Systems
-Wazuh Server
-Asset ID: SOC-01
-Hostname: WAZUH-SRV
-IP address: [WAZUH-IP]
+**Architecture Diagram**
 
-The Wazuh server provides centralized security monitoring for the lab.
+The diagram below shows the flow of controlled testing activity and endpoint telemetry within the isolated lab environment.
 
-Its responsibilities include:
+![Architecture Diagram](./diagram.png)
 
-Receiving telemetry from the Windows endpoint
-Analyzing collected security events
-Applying detection rules
-Indexing security data
-Displaying alerts and events through the Wazuh dashboard
-Supporting investigation and reporting
-Windows Endpoint
-Asset ID: ENDPOINT-01
-Hostname: WIN-ENDPOINT
-IP address: [WINDOWS-IP]
+**Kali Linux Test System**
 
-The Windows endpoint represents the monitored workstation.
+The Kali Linux virtual machine is used to generate safe, controlled security activity against the Windows endpoint within the isolated lab environment. Testing is limited to systems that I own and operate and is not conducted against public systems, third-party services, or unauthorized devices.
 
-Its responsibilities include:
+* **Asset ID:** TEST-01
+* **Hostname:** kali-attacker
+* **IP address:** [REDACTED]
+* **Role:** security-testing system
 
-Generating Windows event logs
-Running the Wazuh agent
-Forwarding configured telemetry to the Wazuh server
-Producing enhanced endpoint telemetry through Sysmon
-Providing evidence for detection and investigation scenarios
-Kali Linux Test System
-Asset ID: TEST-01
-Hostname: KALI-TEST
-IP address: [KALI-IP]
+**Windows Endpoint**
 
-The Kali Linux virtual machine is the authorized security-testing system.
+The Windows virtual machine serves as the monitored endpoint and generates Windows event logs and endpoint telemetry. The Wazuh agent collects and forwards the configured telemetry to the Wazuh server for analysis. Sysmon is planned to provide additional visibility into process creation, command-line execution, network connections, file activity, and registry changes.
 
-Its responsibilities include:
+* **Asset ID:** ENDPOINT-01
+* **Hostname:** win-endpoint
+* **IP address:** [REDACTED]
+* **Role:** Monitored Windows workstation
 
-Generating controlled security activity
-Supporting safe detection validation
-Operating only within the isolated virtual lab
-Testing systems that I own and am authorized to use
-Data Flow
-Kali Linux Test System
-        |
-        | Authorized and controlled test activity
-        v
-Windows Endpoint
-        |
-        | Windows logs, Sysmon events, and file changes
-        v
-Wazuh Agent
-        |
-        | Collected endpoint telemetry
-        v
-Wazuh Server
-        |
-        | Detection, indexing, investigation, and reporting
-        v
-SOC Analyst Review
+**Wazuh Server**
+
+Wazuh serves as the Security Information and Event Management (SIEM) platform for this lab. It collects and analyzes security telemetry from the Windows endpoint, applies detection rules, and provides centralized alerting, search, visualization, and investigation capabilities.
+
+* **Asset ID:** SIEM-01
+* **Hostname:** wazuh-server
+* **IP address:** [REDACTED]
+* **Role:** Central security monitoring platform
+
+**Data Flow**
+
+1.	The Kali Linux VM generates controlled activity within the authorized lab.
+2.	The Windows endpoint records the resulting system and security activity.
+3.	The Wazuh agent collects the configured Windows telemetry.
+4.	The Wazuh server analyzes and indexes the collected events.
+5.	The analyst reviews the evidence and determines whether the activity is benign, suspicious, or malicious.\
+
+**Network Isolation**
+
+All three virtual machines operate within an isolated virtual network.
+
+The testing system is restricted to authorized lab systems. Sensitive information such as credentials, agent keys, tokens, MAC addresses, and private system identifiers is excluded from the public repository.
+
+Current Architecture Status
+
+* Wazuh virtual machine created
+* Windows virtual machine created
+* Kali Linux virtual machine created
+* Windows Wazuh agent installed and validated
+* Kali Linux Wazuh agent installed and validated
+* Architecture diagram added
+* Oracle VirtualBox network type documented
+* Kali to Windows connectivity validated
+* Windows to Wazuh connectivity validated
+* Windows security-log collection validated
+* Kali Linux log collection validated
+* System time synchronization validated across all VMs
+* Clean virtual-machine snapshots created
+
+
