@@ -7,7 +7,7 @@ This inventory documents the virtual machines and security components used in my
 ## Virtualization Environment
 
 * **Virtualization platform:** Oracle VirtualBox
-* **Environment type:** Three-VM home SOC lab
+* **Environment type:** Controlled three-VM home SOC lab
 * **Virtual network type:** Oracle VirtualBox Host-only network with NAT access on selected VMs
 * **Internet access:** Available to SIEM-01 and TEST-01 through separate NAT adapters
 * **Primary purpose:** Defensive security monitoring, detection validation, and SOC investigation practice
@@ -16,19 +16,19 @@ The Host-only network provides the primary communication path between the three 
 
 ## Network Configuration Evidence
 
-**Kali Linux Test System**
+### Kali Linux Test System
 
 ![Oracle VirtualBox network configuration for TEST-01](./kali-network.png)
 
 *Figure 1. TEST-01 uses a NAT adapter for authorized updates and a Host-only adapter for communication with lab systems.*
 
-**Windows Endpoint**
+### Windows Endpoint
 
 ![Oracle VirtualBox network configuration for ENDPOINT-01](./win-network.png)
 
 *Figure 2. ENDPOINT-01 uses a Host-only adapter for communication with the Wazuh SIEM and Kali Linux testing system.*
 
-**Wazuh SIEM**
+### Wazuh SIEM
 
 ![Oracle VirtualBox network configuration for SIEM-01](./wazuh-network.png)
 
@@ -48,19 +48,19 @@ The Wazuh virtual machine operates as the Security Information and Event Managem
 * **Primary role:** Security Information and Event Management platform
 * **Current status:** Configured
 
-### Wazuh Agents
+### Wazuh Agent Status
 
 ![Wazuh agent inventory showing active monitored endpoints](./agents.png)
 
 *Figure 4. Wazuh agent inventory showing the active Windows and Kali Linux agents. IP addresses were redacted before publication.*
 
-### Wazuh Overview 
+### Wazuh Dashboard Overview 
 
 ![Wazuh security monitoring dashboard](./wazuh.png)
 
 *Figure 5. Wazuh dashboard used for centralized endpoint monitoring, alert review, and investigation.*
 
-## Primary Functions
+### Primary Functions
 
 * Log collection and ingestion
 * Detection rules and alerting
@@ -83,22 +83,21 @@ The Windows virtual machine serves as the primary monitored endpoint. The Wazuh 
 * **Primary role:** Monitored Windows workstation
 * **Current status:** Configured
 
-### Data Sources
+### Available Endpoint Data Sources
 
 * Windows Security event log
 * Windows System event log
 * Windows Application event log
 * Wazuh agent telemetry
-* Sysmon Operational log, when configured
-* File Integrity Monitoring, when configured
+* Sysmon Operational event log
 
 ### Sysmon Validation Evidence
 
 Sysmon was locally validated on ENDPOINT-01 using a controlled Notepad process launch. Sysmon Event ID 1 recorded the process creation and captured the executable path, command line, integrity level, SHA-256 hash, and parent-process information.
 
-![endpoint-01-sysmon-notepad-event](./sysmon-notepad.png)
+![Sysmon Event ID 1 process-creation evidence for notepad.exe on ENDPOINT-01](./sysmon-notepad.png)
 
-Figure 6. Sysmon Event ID 1 recorded the creation of notepad.exe on ENDPOINT-01. The Windows account name was redacted before publication.
+*Figure 6. Sysmon Event ID 1 recorded the creation of notepad.exe on ENDPOINT-01. The Windows account name was redacted before publication.*
 
 ---
 ## Kali Linux Test System
@@ -139,25 +138,37 @@ The Kali Linux virtual machine generates safe, controlled security activity agai
 5. SIEM-01 analyzes, indexes, and displays the collected security data.
 6. The analyst reviews the evidence and determines the appropriate alert disposition.
 
-## Inventory Validation Status 
+## Inventory Validation Status
+
+### Completed
 
 * Wazuh virtual machine created
 * Windows virtual machine created
 * Kali Linux virtual machine created
-* Windows Wazuh agent installed
-* Kali Linux Wazuh agent installed
 * Wazuh hostname verified
 * Windows hostname verified
 * Kali Linux hostname verified
 * Operating-system versions documented
 * Wazuh version documented
-* Windows Wazuh agent shown as active
-* Kali Linux Wazuh agent shown as active
-* Windows log collection validated
-* Kali Linux log collection validated
-* Oracle VirtualBox network type documented
-* System time synchronization validated across all VMs
-* Clean snapshots created for all VMs
+* Windows Wazuh agent installed
+* Kali Linux Wazuh agent installed
+* Windows Wazuh agent shown as Active
+* Kali Linux Wazuh agent shown as Active
+* Oracle VirtualBox network configuration documented
+* Sysmon installed on ENDPOINT-01
+* Sysmon service confirmed running
+* Sysmon Event ID 1 validated locally using notepad.exe
+
+### Pending Validation 
+
+* Sysmon Event ID 1 located in Wazuh
+* Windows security-log collection validated in Wazuh
+* Kali Linux log collection validated in Wazuh
+* Wazuh File Integrity Monitoring configured and validated
+* TEST-01-to-ENDPOINT-01 Host-only connectivity validated
+* ENDPOINT-01-to-SIEM-01 Host-only connectivity validated
+* System time synchronization validated across all three VMs
+* Clean snapshots created for all three VMs
 
 ## Public Documentation Notice
 
