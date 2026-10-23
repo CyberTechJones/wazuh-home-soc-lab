@@ -38,10 +38,10 @@ Each completed detection scenario will document:
 ---
 ## Scenario 1: Sysmon Process-Creation Validation
 ### Objective
-Validate the complete telemetry path for a controlled process launch on ENDPOINT-01. The scenario confirmed that Sysmon recorded the process locally and confirmed whether the Windows Wazuh agent forwards the corresponding event to SIEM-01.
+Validate the complete telemetry path for a controlled process launch on ENDPOINT-01. The scenario confirmed that Sysmon recorded the process locally and that the Windows Wazuh agent forwarded the corresponding event to SIEM-01.
 
 ### Controlled Activity
-Launched Windows Notepad on ENDPOINT-01 and review the resulting Sysmon Process Create event.
+Launched Windows Notepad on ENDPOINT-01 using the unique command-line marker C:\SOC-Lab-Scenario1.txt and reviewed the resulting Sysmon Process Create event.
 
 ### Data Source
 * Microsoft-Windows-Sysmon/Operational
