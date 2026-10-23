@@ -74,19 +74,19 @@ Launched Windows Notepad on ENDPOINT-01 using the unique command-line marker `C:
 * Event-versus-alert classification
 
 ### Current Status
-* Sysmon installed on ENDPOINT-01
-* Sysmon service confirmed running
-* Sysmon Operational event channel confirmed
-* Controlled Notepad process launch completed
-* Sysmon Event ID 1 validated locally
-* Sysmon Operational channel configured in the Windows Wazuh agent
-* Windows Wazuh agent remained Active
-* Sysmon event collection confirmed in Wazuh
-* Exact Notepad event located in the Wazuh JSON archive
-* Local and centralized evidence correlated
-* Investigation findings documented
-* Final disposition recorded
-* Temporary JSON event archiving disabled
+- [x] Sysmon installed on ENDPOINT-01
+- [x] Sysmon service confirmed running
+- [x] Sysmon Operational event channel confirmed
+- [x] Controlled Notepad process launch completed
+- [x] Sysmon Event ID 1 validated locally
+- [x] Sysmon Operational channel configured in the Windows Wazuh agent
+- [x] Windows Wazuh agent remained Active
+- [x] Sysmon event collection confirmed in Wazuh
+- [x] Exact Notepad event located in the Wazuh JSON archive
+- [x] Local and centralized evidence correlated
+- [x] Investigation findings documented
+- [x] Final disposition recorded
+- [x] Temporary JSON event archiving disabled
 
 **Status:** Complete
 
