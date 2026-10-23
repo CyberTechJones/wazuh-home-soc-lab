@@ -7,3 +7,10 @@ I generated a controlled Notepad process launch on ENDPOINT-01 using the unique 
 
 
 *Figure 1. Sysmon Event ID 1 recorded the controlled Notepad process launch on ENDPOINT-01. The unique command-line marker SOC-Lab-Scenario1.txt supports correlation with the centralized Wazuh archive record.*
+
+# Wazuh Sysmon Collection Configuration
+I configured the Windows Wazuh agent to collect events from the Sysmon Operational event channel. This configuration enables Sysmon telemetry from ENDPOINT-01 to be forwarded to SIEM-01 for centralized collection and analysis.
+
+![Wazuh agent Sysmon event-channel configuration](02-wazuh-sysmon-channel-configuration.png)
+
+*Figure 2. Windows Wazuh agent configuration for collecting events from the Microsoft-Windows-Sysmon/Operational event channel.*
