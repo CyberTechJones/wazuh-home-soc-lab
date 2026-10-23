@@ -24,14 +24,14 @@ I searched the Wazuh JSON archive using the unique command-line marker SOC-Lab-S
 ![Wazuh archive Sysmon event details](03b-wazuh-archive-event-details.png)
 ![Wazuh archive Notepad process details](03c-wazuh-archive-process-details.png)
 
-Figure 3. Three views of the same Wazuh JSON archive record confirming receipt of the controlled Notepad Sysmon Event ID 1 from ENDPOINT-01. The unique marker SOC-Lab-Scenario1.txt correlates the local Sysmon record with the centralized Wazuh event.
+*Figure 3. Three views of the same Wazuh JSON archive record confirming receipt of the controlled Notepad Sysmon Event ID 1 from ENDPOINT-01. The unique marker SOC-Lab-Scenario1.txt correlates the local Sysmon record with the centralized Wazuh event.*
 
 ## Investigation and Correlation
 I correlated the local Sysmon event with the centralized Wazuh archive record using the unique command-line marker SOC-Lab-Scenario1.txt.
 
 The following fields matched across the endpoint and SIEM evidence:
 
-* **Provider: Microsoft-Windows-Sysmon
+* **Provider:** Microsoft-Windows-Sysmon
 * **Event ID:** 1
 * **Event type:** Process Create
 * **Computer:** win-endpoint
@@ -94,3 +94,28 @@ Sysmon Event ID 1 confirms that a process was created, but an ordinary Notepad l
 JSON event archiving was enabled temporarily to validate receipt of the benign event. After the Wazuh archive record was collected, the archive settings were restored to:
 
 ![Cleanup proof](cleanup.png)
+
+*Figure 4. Wazuh JSON event archiving was returned to its original disabled state after the controlled validation test.*
+
+## Lessons Learned
+* Installing a telemetry source does not automatically prove centralized collection.
+* A collected event does not automatically generate a security alert.
+* A unique command-line marker supports reliable endpoint-to-SIEM correlation.
+* Local and UTC timestamps must be compared carefully during investigations.
+* Normal process execution should not be classified as malicious without supporting evidence.
+* Temporary full-event archiving should be disabled after validation to reduce unnecessary storage usage.
+
+## Scenario Completion Checklist
+* Sysmon installed on ENDPOINT-01
+* Sysmon service confirmed running
+* Sysmon Event ID 1 validated locally
+* Sysmon Operational channel added to the Windows Wazuh agent
+* Windows Wazuh agent remained Active
+* Unique Notepad test event generated
+* Exact event located in the Wazuh JSON archive
+* Local and centralized evidence correlated
+* Event-versus-alert distinction documented
+* Final disposition recorded
+* Temporary JSON event archiving disabled
+* Public evidence reviewed and sanitized
+
