@@ -38,12 +38,12 @@ Each completed detection scenario will document:
 ---
 ## Scenario 1: Sysmon Process-Creation Validation
 ### Objective
-Validate the complete telemetry path for a controlled process launch on ENDPOINT-01. The scenario will confirm that Sysmon records the process locally and determine whether the Windows Wazuh agent forwards the corresponding event to SIEM-01.
+Validate the complete telemetry path for a controlled process launch on ENDPOINT-01. The scenario confirmed that Sysmon recorded the process locally and confirmed whether the Windows Wazuh agent forwards the corresponding event to SIEM-01.
 
 ### Controlled Activity
-Launch Windows Notepad on ENDPOINT-01 and review the resulting Sysmon Process Create event.
+Launched Windows Notepad on ENDPOINT-01 and review the resulting Sysmon Process Create event.
 
-### Expected Data Source
+### Data Source
 * Microsoft-Windows-Sysmon/Operational
 * Sysmon Event ID 1
 * Windows Wazuh agent telemetry
@@ -76,14 +76,22 @@ Launch Windows Notepad on ENDPOINT-01 and review the resulting Sysmon Process Cr
 * Sysmon installed on ENDPOINT-01
 * Sysmon service confirmed running
 * Sysmon Operational event channel confirmed
-* Notepad process launch completed
+* Controlled Notepad process launch completed
 * Sysmon Event ID 1 validated locally
+* Sysmon Operational channel configured in the Windows Wazuh agent
+* Windows Wazuh agent remained Active
 * Sysmon event collection confirmed in Wazuh
-* Matching event located in SIEM-01
+* Exact Notepad event located in the Wazuh JSON archive
+* Local and centralized evidence correlated
 * Investigation findings documented
-* Final alert disposition recorded
+* Final disposition recorded
+* Temporary JSON event archiving disabled
 
-**Current conclusion:** Sysmon process-creation telemetry has been validated locally. Centralized collection in Wazuh remains pending.
+**Status:** Complete
+
+**Final disposition:** Authorized benign activity with informational severity and high confidence. The activity was not classified as a security incident.
+
+[View the completed Scenario 1 report](./01-sysmon-process-creation/README.md)
 
 ## Scenario 2: Repeated Failed Windows Logons
 ### Objective
