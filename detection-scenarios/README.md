@@ -41,12 +41,13 @@ Each completed detection scenario will document:
 Validate the complete telemetry path for a controlled process launch on ENDPOINT-01. The scenario confirmed that Sysmon recorded the process locally and that the Windows Wazuh agent forwarded the corresponding event to SIEM-01.
 
 ### Controlled Activity
-Launched Windows Notepad on ENDPOINT-01 using the unique command-line marker C:\SOC-Lab-Scenario1.txt and reviewed the resulting Sysmon Process Create event.
+Launched Windows Notepad on ENDPOINT-01 using the unique command-line marker `C:\SOC-Lab-Scenario1.txt` and reviewed the resulting Sysmon Process Create event.
 
-### Data Source
-* Microsoft-Windows-Sysmon/Operational
-* Sysmon Event ID 1
+### Data Sources
+* `Microsoft-Windows-Sysmon/Operational`
+* Sysmon Event ID `1`
 * Windows Wazuh agent telemetry
+* Wazuh JSON event archive
 
 ### Evidence of Interest
 * Event timestamp
