@@ -1,46 +1,43 @@
 # Scenario 2: Controlled Failed Windows Logons
 
-## Scenario Objective
+## Objective
 
-Validate the collection, detection, and investigation of controlled Windows authentication failures on ENDPOINT-01.
+Validate whether controlled Windows authentication failures are recorded on ENDPOINT-01 and forwarded to SIEM-01 by the Wazuh agent.
 
-The scenario confirmed that Windows recorded the failed sign-in attempts as Security Event ID `4625` and that the Windows Wazuh agent forwarded the corresponding authentication telemetry to SIEM-01.
-
-Event ID `4625` represents an account failing to log on and is generated on the computer where the failed authentication attempt occurred.
+Windows records failed authentication attempts as Security Event ID `4625`.
 
 ## Environment
 
-- **Target system:** ENDPOINT-01
+- **Target:** ENDPOINT-01
 - **Operating system:** Windows 11
-- **Wazuh agent name:** `windows-target`
-- **Wazuh agent ID:** `001`
+- **Wazuh agent:** `windows-target`
+- **Agent ID:** `001`
 - **SIEM:** SIEM-01
 - **Test account:** Dedicated local lab account
 - **Test location:** Windows lock screen
-- **Planned failed attempts:** Three
-- **Authorization:** Testing restricted to systems that I own and operate
+- **Failed attempts:** Three
+- **Authorization:** Testing limited to systems I own and operate
 
-TEST-01 was not required for this scenario because the controlled authentication failures were generated locally on ENDPOINT-01.
+TEST-01 was not required because the authentication failures were generated locally on ENDPOINT-01.
 
 ## Safety Controls
 
-Before testing, I reviewed the Windows account-lockout policy and limited the test to three incorrect-password attempts.
+Before testing, I reviewed the account-lockout policy and confirmed that three failed attempts would remain below the threshold of 10.
 
-The purpose was to generate failed-logon telemetry, not to test password strength, trigger an account lockout, perform brute force, or simulate password spraying.
+The test was designed to generate authentication telemetry, not to trigger account lockout or simulate brute force.
 
-The following safety controls were applied:
+Safety controls included:
 
 - Use only a dedicated lab account.
-- Confirm the correct password before locking Windows.
-- Review the account-lockout threshold.
-- Remain below the configured lockout threshold.
-- Stop testing if the account becomes locked.
+- Verify the correct password before testing.
+- Remain below the lockout threshold.
+- Stop if the account becomes locked.
 - Do not record or publish the password.
-- Do not test accounts or systems outside the authorized lab.
+- Restrict testing to the authorized lab.
 
 ## Prerequisite Validation
 
-### Failed-Logon Auditing
+### Logon Auditing
 
 I reviewed the Windows Logon audit policy using:
 
@@ -48,10 +45,8 @@ I reviewed the Windows Logon audit policy using:
 auditpol /get /subcategory:"Logon"
 ```
 
-- **Observed result:** Success and Failure
-- **Validation status:** Pass
-
-The result confirmed that ENDPOINT-01 was configured to audit both successful and failed logon activity.
+- **Result:** Success and Failure
+- **Status:** Pass
 
 ### Account-Lockout Policy
 
@@ -61,58 +56,48 @@ I reviewed the local account policy using:
 net accounts
 ```
 
-The relevant settings were:
-
-- **Lockout threshold:** 10 failed attempts
+- **Lockout threshold:** 10 attempts
 - **Lockout duration:** 10 minutes
-- **Lockout observation window:** 10 minutes
+- **Observation window:** 10 minutes
 - **Planned failed attempts:** Three
-- **Validation status:** Pass
+- **Status:** Pass
 
-The controlled test remained safely below the configured lockout threshold.
+### Wazuh Agent
 
-### Wazuh Agent Status
+Before testing, I confirmed that the Wazuh agent was running and ENDPOINT-01 appeared as Active in Wazuh.
 
-Before generating the authentication failures, I confirmed that the Wazuh agent on ENDPOINT-01 was running and that the endpoint appeared as Active in Wazuh.
-
-- **Wazuh service status:** Running
-- **Wazuh dashboard status:** Active
-- **Validation status:** Pass
+- **Service status:** Running
+- **Dashboard status:** Active
+- **Status:** Pass
 
 ### Prerequisite Evidence
 
-Failed-logon auditing was enabled for successful and failed logon events. The local account-lockout threshold was configured for 10 failed attempts, so I limited the controlled test to three incorrect-password attempts.
-
 ![Windows failed-logon auditing and account-lockout settings](01-audit-and-lockout-prerequisites.png)
 
-*Figure 1. Windows Logon auditing was configured for Success and Failure. The account-lockout threshold was 10 attempts, with a 10-minute lockout duration and a 10-minute observation window. The controlled test was limited to three failed attempts.*
+*Figure 1. Windows Logon auditing was enabled for Success and Failure. The lockout threshold was 10 attempts, with a 10-minute duration and observation window.*
 
 ## Controlled Activity
 
-I generated three controlled incorrect-password attempts against the dedicated local lab account `user01` at the Windows lock screen on ENDPOINT-01.
+I entered an incorrect password three times for the dedicated local account `user01` at the Windows lock screen.
 
-After the three failed attempts, I signed in using the correct password and stopped the test. The activity remained safely below the configured lockout threshold of 10 attempts.
-
-### Test Record
+I then signed in with the correct password and stopped the test.
 
 - **Test date:** October 23, 2026
-- **Target endpoint:** ENDPOINT-01
+- **Endpoint:** ENDPOINT-01
 - **Target account:** `user01`
-- **Test location:** Windows lock screen
-- **Failed attempts generated:** Three
-- **Subsequent successful sign-in:** Yes
-- **Unexpected account lockout:** No
+- **Failed attempts:** Three
+- **Successful sign-in afterward:** Yes
+- **Account locked:** No
 
 ## Local Windows Evidence
 
-Windows recorded the controlled authentication failures as Security Event ID `4625`.
+Windows recorded the authentication failures as Security Event ID `4625`.
 
-The selected event represents one of the three controlled failed sign-in attempts and contains the following evidence:
+The representative event contained:
 
 - **Time created:** October 23, 2026 at 6:08:08 PM
 - **Event ID:** `4625`
 - **Provider:** `Microsoft-Windows-Security-Auditing`
-- **Message:** An account failed to log on
 - **Target account:** `user01`
 - **Target domain:** `WIN-ENDPOINT`
 - **Logon type:** `2`
@@ -120,50 +105,43 @@ The selected event represents one of the three controlled failed sign-in attempt
 - **Status:** `0xC000006D`
 - **Sub-status:** `0xC000006A`
 - **Caller process:** `C:\Windows\System32\svchost.exe`
-- **Workstation name:** `WIN-ENDPOINT`
+- **Workstation:** `WIN-ENDPOINT`
 
-Logon Type `2` is consistent with an interactive sign-in attempt at the Windows console, matching the controlled lock-screen test.
+Logon Type `2` is consistent with an interactive sign-in at the Windows console.
 
 ![Local Windows Security Event ID 4625](02-windows-event-4625-local.png)
 
-*Figure 2. Windows Security Event ID 4625 recorded one of three controlled failed interactive sign-in attempts on ENDPOINT-01. The event identified Logon Type 2, the target account, failure reason, status and sub-status codes, caller process, and workstation.*
+*Figure 2. Windows Security Event ID 4625 recorded one of three controlled failed interactive sign-in attempts on ENDPOINT-01.*
 
 ## Wazuh Detection Evidence
 
-I searched Wazuh Threat Hunting for Windows Security Event ID `4625` using:
+I searched Wazuh Threat Hunting using:
 
 ```text
 data.win.system.eventID:4625
 ```
 
-The search was restricted to Wazuh agent ID `001`, representing the monitored Windows endpoint.
+Wazuh displayed three corresponding alerts:
 
-Wazuh displayed three Event ID `4625` alerts during the selected time range:
-
-- **Agent name:** `windows-target`
+- **Agent:** `windows-target`
 - **Agent ID:** `001`
 - **Event ID:** `4625`
 - **Rule ID:** `60122`
 - **Rule level:** `5`
 - **Rule description:** Logon Failure - Unknown user or bad password
-- **Displayed alerts:** Three
-- **First displayed timestamp:** October 23, 2026 at 6:08:46.930 PM
-- **Second displayed timestamp:** October 23, 2026 at 6:08:49.310 PM
-- **Third displayed timestamp:** October 23, 2026 at 6:09:10.749 PM
+- **Alert count:** Three
 
 ![Wazuh Threat Hunting results for Windows Event ID 4625](03-wazuh-event-4625.png)
 
-*Figure 3. Wazuh Threat Hunting displayed three Event ID 4625 alerts from the monitored Windows endpoint. Rule ID `60122`, at rule level `5`, classified the activity as a logon failure involving an unknown username or incorrect password.*
+*Figure 3. Wazuh displayed three Event ID 4625 alerts. Rule `60122`, at level `5`, classified the activity as failed authentication involving an unknown username or incorrect password.*
 
 ## Investigation and Correlation
 
-I compared the local Windows Security evidence with the failed-logon alerts displayed in Wazuh.
-
-The following evidence was consistent across the local and centralized records:
+The following fields were consistent across the Windows and Wazuh evidence:
 
 - **Endpoint:** ENDPOINT-01
-- **Wazuh agent:** `windows-target`
-- **Windows Event ID:** `4625`
+- **Agent:** `windows-target`
+- **Event ID:** `4625`
 - **Target account:** `user01`
 - **Target domain:** `WIN-ENDPOINT`
 - **Logon type:** `2`
@@ -171,122 +149,63 @@ The following evidence was consistent across the local and centralized records:
 - **Status:** `0xC000006D`
 - **Sub-status:** `0xC000006A`
 - **Workstation:** `WIN-ENDPOINT`
-- **Wazuh rule ID:** `60122`
-- **Wazuh rule level:** `5`
-- **Controlled failed attempts:** Three
-- **Wazuh alerts displayed:** Three
+- **Wazuh rule:** `60122`
+- **Controlled failures:** Three
+- **Wazuh alerts:** Three
 
-The number of Wazuh alerts matched the number of intentional failed-password attempts.
+The matching endpoint, account, Event ID, failure details, test window, and alert count confirmed that Wazuh detected the controlled activity.
 
-The matching endpoint, Event ID, account context, failure information, alert count, and test window supported the conclusion that Wazuh successfully detected the controlled failed-logon activity.
-
-## SOC Investigation Workflow
-
-### Alert Triage
+## Investigation Workflow
 
 I reviewed:
 
-1. The affected endpoint
-2. The target account
-3. The number and timing of failed attempts
-4. The logon type
-5. The failure reason
-6. The status and sub-status codes
-7. The caller process
-8. The workstation name
-9. The corresponding Wazuh rule
-10. Whether the expected account remained accessible after the test
+1. The affected endpoint and account
+2. The number and timing of failures
+3. The logon type
+4. The failure reason
+5. The status and sub-status codes
+6. The caller process and workstation
+7. The Wazuh rule information
+8. The subsequent successful sign-in
+9. Related failures involving other accounts or endpoints
 
-### Initial Validation
+Potential benign causes of Event ID `4625` include mistyped passwords, outdated stored credentials, scheduled tasks, mapped resources, and authorized testing.
 
-I compared the observed events with:
-
-- The documented test window
-- The expected Windows endpoint
-- The dedicated lab account
-- The expected interactive Logon Type `2`
-- The recorded failure reason and status codes
-- The number of intentional failed attempts
-- The number of Wazuh alerts
-- The subsequent successful sign-in
-
-### Scope Determination
-
-I reviewed the available evidence for:
-
-- Additional Event ID `4625` records involving `user01`
-- Failed attempts involving other accounts
-- Authentication failures outside the authorized test window
-- Unexpected source addresses
-- Similar failed-logon activity on other endpoints
-- A subsequent successful sign-in
-
-### False-Positive and Benign-Activity Analysis
-
-Common benign explanations for Event ID `4625` include:
-
-- A user entering an incorrect password
-- Stored credentials containing an outdated password
-- A scheduled task or service using outdated credentials
-- A mapped resource attempting to authenticate with invalid credentials
-- An authorized security test
-
-In this scenario, the documented test context, target account, endpoint, interactive Logon Type `2`, limited number of attempts, and matching Wazuh alert count supported an authorized benign explanation.
+The documented test context, Logon Type `2`, limited volume, and matching alert count supported an authorized benign explanation.
 
 ## Findings
 
 ### Evidence Proves
 
-- Three controlled failed sign-in attempts were generated on ENDPOINT-01.
-- Windows rejected the interactive sign-in attempts.
-- Windows recorded the failures as Security Event ID `4625`.
-- The failed attempts targeted the local account `user01`.
-- The representative event used Logon Type `2`, consistent with an interactive console sign-in.
-- The failure reason was recorded as an unknown username or incorrect password.
-- The Windows Wazuh agent forwarded failed-logon telemetry to SIEM-01.
-- Wazuh displayed three Event ID `4625` alerts.
-- The Wazuh alert count matched the number of controlled failed attempts.
-- Wazuh rule `60122` generated level `5` alerts for the failed-logon activity.
-
-### Evidence Suggests
-
-- The three Wazuh alerts were consistent with the three controlled failed-password attempts.
-- The activity remained limited to the designated Windows lab endpoint and account.
-- The detection logic operated as expected for the controlled authentication failures.
+- Three controlled failed sign-ins occurred on ENDPOINT-01.
+- Windows recorded the failures as Event ID `4625`.
+- The attempts targeted `user01`.
+- The representative event used interactive Logon Type `2`.
+- Wazuh generated three rule-level `5` alerts.
+- The Wazuh alert count matched the test count.
 
 ### Evidence Does Not Prove
 
-- A brute-force attack occurred.
+- Brute force occurred.
 - Password spraying occurred.
 - Credentials were stolen.
 - The account was compromised.
 - Unauthorized access succeeded.
 - Malicious intent existed.
-- Incident containment was required.
 
-## Event and Alert Analysis
+## Event and Alert Classification
 
-The failed logon events were expected because they were intentionally generated as part of the authorized test.
+Windows recorded each failed authentication attempt as an event. Wazuh rule `60122` matched the activity and generated alerts.
 
-Wazuh correctly generated alerts for the failed-logon behavior, making the detection a true positive. The underlying activity remained benign because it was performed intentionally within the controlled lab.
+The detection was a **true positive** because Wazuh correctly identified the failed-logon behavior. The underlying activity was **benign** because it was authorized and intentionally generated.
 
-This scenario demonstrated the distinction between:
-
-- **Event:** Windows recorded each failed authentication attempt as Event ID `4625`.
-- **Alert:** Wazuh rule `60122` identified the failed-logon behavior and generated level `5` alerts.
-- **Incident:** No security incident occurred because the activity was authorized, limited, and successfully validated.
+No security incident occurred.
 
 ## MITRE ATT&CK Mapping
 
-No MITRE ATT&CK technique was assigned to this scenario.
+No MITRE ATT&CK technique was assigned.
 
-Three manually generated failed-logon attempts do not provide sufficient evidence of Brute Force behavior. A mapping to Brute Force would require stronger supporting evidence, such as automated attempts, significant volume, repeated timing patterns, multiple targeted accounts, or other indications of adversary activity.
-
-- **Tactic:** Not assigned
-- **Technique:** Not assigned
-- **Technique ID:** Not assigned
-- **Confidence:** High
-- **Reason:** The limited and authorized test demonstrated failed-authentication telemetry rather than adversary behavior.
+Three manual failed-logon attempts do not provide sufficient evidence of Brute Force behavior. A Brute Force mapping would require stronger indicators such as automation, higher volume, repeated patterns, or multiple targeted accounts.
 
 ## Final Disposition
 
@@ -299,68 +218,63 @@ Three manually generated failed-logon attempts do not provide sufficient evidenc
 - **Containment required:** No
 - **Remediation required:** No
 
-The detection was classified as a true positive because Wazuh correctly identified the failed-logon behavior. The underlying activity was benign because it was intentionally generated within the authorized test window.
+The Low severity reflects that Wazuh generated rule-level `5` alerts requiring analyst review. Authorization, limited volume, and the successful subsequent sign-in reduced the security concern.
 
-The final severity was assessed as Low because Wazuh generated rule-level `5` alerts that required analyst validation. The documented authorization, limited volume, and successful account recovery reduced the activity from a potential authentication concern to a benign test result.
-
-## Containment and Remediation
+## Response Considerations
 
 No containment or remediation was required because:
 
-- The activity matched the authorized test plan.
+- The activity matched the test plan.
 - The expected lab account was targeted.
 - The attempts remained below the lockout threshold.
 - The account was not locked.
 - The correct password remained functional.
-- No evidence of successful unauthorized access was identified.
+- No unauthorized successful access was identified.
 
-For a similar unauthorized pattern in a production environment, potential response actions would include:
+For similar unauthorized activity, an analyst should:
 
 1. Validate the activity with the account owner.
 2. Review related failed and successful logons.
-3. Identify the source system and authentication path.
-4. Determine whether the failures continued after the initial alert.
+3. Identify the source system.
+4. Determine whether attempts continued.
 5. Reset credentials if compromise is suspected.
-6. Temporarily restrict the account if credible risk exists.
-7. Review account-lockout and multifactor-authentication controls.
-8. Increase monitoring for additional authentication attempts.
+6. Restrict the account if credible risk exists.
+7. Review lockout and multifactor-authentication controls.
+8. Increase monitoring for additional attempts.
 
 ## Cleanup
 
-The test did not create files, modify accounts, or change passwords.
+The test did not modify accounts, passwords, files, or system settings.
 
-Cleanup consisted of:
+I confirmed that:
 
-- Confirming that the correct account password remained functional
-- Verifying that the account was not locked
-- Confirming that the Wazuh agent remained Active
-- Preserving the local Windows and Wazuh evidence
-- Leaving failed-logon auditing enabled for continued SOC monitoring
+- The correct password remained functional.
+- The account was not locked.
+- The Wazuh agent remained Active.
+- Failed-logon auditing remained enabled.
+- The evidence was preserved and sanitized.
 
 ## Lessons Learned
 
-- Event ID `4625` records failed authentication but does not independently prove malicious intent.
-- Logon Type `2` is consistent with an interactive sign-in at the Windows console.
-- Status and sub-status codes provide important context for authentication failures.
-- Account-lockout settings should be reviewed before generating controlled failures.
-- A small number of failed logons should not automatically be classified as brute force.
-- Wazuh rule information must be copied from the actual environment rather than assumed.
-- Alert counts should be compared with the documented test record.
-- A detection can be a true positive while the underlying activity remains authorized and benign.
+- Event ID `4625` confirms failed authentication, not malicious intent.
+- Logon Type `2` represents an interactive console sign-in.
+- Status and sub-status codes provide important authentication context.
+- Lockout policies should be reviewed before testing.
+- A small number of failures should not automatically be classified as brute force.
+- A detection can be accurate while the underlying activity remains authorized and benign.
+- Alert counts should be compared with the test record.
 
-## Scenario Completion Checklist
+## Completion Checklist
 
 - [x] Failed-logon auditing verified
 - [x] Account-lockout threshold reviewed
-- [x] Controlled test window documented
-- [x] Three intentional failed logons generated
+- [x] Three controlled failed logons generated
 - [x] Windows Event ID `4625` located locally
-- [x] Relevant Event ID `4625` fields reviewed
+- [x] Relevant authentication fields reviewed
 - [x] Three corresponding Wazuh alerts located
-- [x] Wazuh alert count matched the controlled test count
-- [x] Actual Wazuh rule ID, level, and description recorded
+- [x] Alert count matched the test count
+- [x] Wazuh rule ID, level, and description recorded
 - [x] Local and centralized evidence correlated
-- [x] Event-versus-alert distinction documented
 - [x] Final disposition recorded
 - [x] Public evidence reviewed and sanitized
 
@@ -368,4 +282,4 @@ Cleanup consisted of:
 
 **Status:** Complete
 
-**Final finding:** Windows recorded the three controlled failed sign-in attempts as Security Event ID `4625`, and Wazuh generated three corresponding rule-level `5` alerts under rule ID `60122`. The activity was classified as an authorized benign true positive with Low severity and High confidence.
+**Final finding:** Windows recorded the three controlled failed sign-in attempts as Event ID `4625`. Wazuh generated three corresponding level `5` alerts under rule `60122`. The activity was classified as an authorized benign true positive with Low severity and High confidence.
