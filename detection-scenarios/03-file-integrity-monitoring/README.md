@@ -143,6 +143,16 @@ The rename appeared as two closely timed events rather than a single event label
 
 *Figure 5. Wazuh recorded the complete controlled file lifecycle on ENDPOINT-01. Rule `554` detected file additions, rule `550` detected the content modification, and rule `553` detected deletions. The rename appeared as deletion of the original path followed approximately 0.049 seconds later by addition of the renamed path.*
 
+## Observed Wazuh Rules
+
+| File action | Rule ID | Rule level | Observed description |
+|---|---:|---:|---|
+| Added | `554` | `5` | File added |
+| Modified | `550` | `7` | Integrity checksum changed |
+| Deleted | `553` | `7` | File deleted |
+
+The rule information was recorded directly from the Scenario 3 events in the local Wazuh environment.
+
 ## Evidence of Interest
 
 The investigation will review:
