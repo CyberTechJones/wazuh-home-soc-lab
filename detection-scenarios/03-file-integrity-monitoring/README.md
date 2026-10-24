@@ -127,6 +127,22 @@ Wazuh recorded a final FIM event with the action `deleted`. The event completed 
 
 *Figure 5. Wazuh File Integrity Monitoring detected deletion of the renamed test file on ENDPOINT-01. The event list shows the complete controlled sequence: the original file was added and modified, the rename appeared as deletion of the original path and addition of the new path, and the renamed file was subsequently deleted.*
 
+## Complete FIM Event Sequence
+
+Wazuh recorded five events during the controlled file lifecycle:
+
+1. The original file was added.
+2. The original file was modified.
+3. The original path was deleted during the rename.
+4. The renamed path was added.
+5. The renamed file was deleted.
+
+The rename appeared as two closely timed events rather than a single event labeled `renamed`: deletion of the original path and addition of the new path.
+
+![Complete Wazuh FIM event sequence](05-wazuh-fim-complete-event-sequence.png)
+
+*Figure 5. Wazuh recorded the complete controlled file lifecycle on ENDPOINT-01. Rule `554` detected file additions, rule `550` detected the content modification, and rule `553` detected deletions. The rename appeared as deletion of the original path followed approximately 0.049 seconds later by addition of the renamed path.*
+
 ## Evidence of Interest
 
 The investigation will review:
