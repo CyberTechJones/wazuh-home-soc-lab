@@ -60,6 +60,16 @@ The controlled test will perform these actions:
 - Windows Wazuh agent telemetry
 - Monitored directory: `C:\SOC-Lab\FIM-Test`
 
+## FIM Configuration Evidence
+
+I configured the Wazuh agent on ENDPOINT-01 to monitor the dedicated test directory `C:\SOC-Lab\FIM-Test`.
+
+The configuration enabled real-time monitoring, supported file-attribute checks, and text-change reporting.
+
+![Wazuh File Integrity Monitoring configuration](01-wazuh-fim-configuration.png)
+
+*Figure 1. The Wazuh agent on ENDPOINT-01 was configured to monitor `C:\SOC-Lab\FIM-Test` using real-time File Integrity Monitoring.*
+
 ## Evidence of Interest
 
 The investigation will review:
