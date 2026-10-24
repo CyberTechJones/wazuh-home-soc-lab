@@ -38,6 +38,15 @@ Safety requirements:
 - Do not test accounts or systems outside the authorized lab.
 
 ## Prerequisite Validation
+### Prerequisite Evidence
+
+Failed-logon auditing was enabled for both successful and failed logon events. The local account-lockout threshold was configured for 10 failed attempts, so I limited the controlled test to two incorrect password attempts.
+
+![Windows failed-logon audit and account-lockout settings](01-audit-and-lockout-prerequisites.png)
+
+*Figure 1. Windows Logon auditing was configured for Success and Failure. The account-lockout threshold was 10 attempts, with a 10-minute lockout duration and 10-minute observation window.*
+
+
 
 ### Failed-Logon Auditing
 
