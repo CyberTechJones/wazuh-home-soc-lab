@@ -115,6 +115,18 @@ Wazuh represented the rename as two closely timed FIM events:
 
 *Figure 4. Wazuh represented the controlled file rename as a deletion of the original path and an addition of the renamed path. The closely timed events and matching directory context supported correlation to the same rename operation.*
 
+## File-Deletion Evidence
+
+After validating the rename-related events, I deleted the renamed test file:
+
+`C:\SOC-Lab\FIM-Test\fim-renamed-20261023-223926.txt`
+
+Wazuh recorded a final FIM event with the action `deleted`. The event completed the controlled file lifecycle of creation, modification, renaming, and deletion.
+
+![Wazuh FIM file-deletion evidence](05-wazuh-fim-file-deleted.png)
+
+*Figure 5. Wazuh File Integrity Monitoring detected deletion of the renamed test file on ENDPOINT-01. The event list shows the complete controlled sequence: the original file was added and modified, the rename appeared as deletion of the original path and addition of the new path, and the renamed file was subsequently deleted.*
+
 ## Evidence of Interest
 
 The investigation will review:
