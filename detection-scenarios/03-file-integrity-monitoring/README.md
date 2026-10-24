@@ -70,6 +70,18 @@ The configuration enabled real-time monitoring, supported file-attribute checks,
 
 *Figure 1. The Wazuh agent on ENDPOINT-01 was configured to monitor `C:\SOC-Lab\FIM-Test` using real-time File Integrity Monitoring.*
 
+## File-Creation Evidence
+
+After confirming that real-time FIM monitoring was active, I created a uniquely named text file inside the monitored directory:
+
+`C:\SOC-Lab\FIM-Test\fim-create-20261023-223926.txt`
+
+Wazuh detected the file as added and displayed the corresponding event for the `windows-target` agent.
+
+![Wazuh FIM file-creation event](02-wazuh-fim-file-created.png)
+
+*Figure 2. Wazuh File Integrity Monitoring detected the controlled creation of `fim-create-20261023-223926.txt` on ENDPOINT-01. The `syscheck.event` value identified the action as `added`.*
+
 ## Evidence of Interest
 
 The investigation will review:
