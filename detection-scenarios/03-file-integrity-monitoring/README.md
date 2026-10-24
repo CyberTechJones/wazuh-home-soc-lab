@@ -82,6 +82,20 @@ Wazuh detected the file as added and displayed the corresponding event for the `
 
 *Figure 2. Wazuh File Integrity Monitoring detected the controlled creation of `fim-create-20261023-223926.txt` on ENDPOINT-01. The `syscheck.event` value identified the action as `added`.*
 
+## File-Modification Evidence
+
+After validating the file-creation event, I added controlled text content to the same monitored file.
+
+Wazuh recorded a second FIM event for:
+
+`C:\SOC-Lab\FIM-Test\fim-create-20261023-223926.txt`
+
+The event timeline showed the file first as `added` and later as `modified`.
+
+![Wazuh FIM file-addition and modification events](03-wazuh-fim-file-modified.png)
+
+*Figure 3. Wazuh File Integrity Monitoring recorded the controlled file as added and later modified on ENDPOINT-01. The matching path and chronological event actions confirmed that real-time FIM monitoring detected both changes.*
+
 ## Evidence of Interest
 
 The investigation will review:
