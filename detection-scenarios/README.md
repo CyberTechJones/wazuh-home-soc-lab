@@ -135,7 +135,11 @@ Intentionally enter an incorrect password several times for a dedicated lab acco
 * Investigation completed
 * Final disposition documented
 
-**Status:** Planned
+**Status:** Complete
+
+**Final disposition:** Authorized benign true positive with Low severity and High confidence. The activity was not classified as a security incident.
+
+| [Controlled failed Windows logons](./02-failed-windows-logons/README.md) | Complete | Authentication investigation |
 
 # Scenario 3: File Integrity Monitoring
 ## Objective
