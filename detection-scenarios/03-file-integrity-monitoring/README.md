@@ -96,6 +96,25 @@ The event timeline showed the file first as `added` and later as `modified`.
 
 *Figure 3. Wazuh File Integrity Monitoring recorded the controlled file as added and later modified on ENDPOINT-01. The matching path and chronological event actions confirmed that real-time FIM monitoring detected both changes.*
 
+## File-Rename Evidence
+
+I renamed the monitored file from:
+
+`C:\SOC-Lab\FIM-Test\fim-create-20261023-223926.txt`
+
+to:
+
+`C:\SOC-Lab\FIM-Test\fim-renamed-20261023-223926.txt`
+
+Wazuh represented the rename as two closely timed FIM events:
+
+- The original path was recorded as `deleted`.
+- The renamed path was recorded as `added`.
+
+![Wazuh FIM file-rename evidence](04-wazuh-fim-file-renamed.png)
+
+*Figure 4. Wazuh represented the controlled file rename as a deletion of the original path and an addition of the renamed path. The closely timed events and matching directory context supported correlation to the same rename operation.*
+
 ## Evidence of Interest
 
 The investigation will review:
