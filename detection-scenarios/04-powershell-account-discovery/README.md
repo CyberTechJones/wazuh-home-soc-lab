@@ -84,3 +84,23 @@ The command returned local account names, enabled status, and descriptions witho
 ![Controlled PowerShell local-account discovery output](02-powershell-get-localuser-output.png)
 
 *Figure 2. The controlled PowerShell process executed `Get-LocalUser` on ENDPOINT-01 using the unique marker `SOC-Lab-Scenario4`. The read-only command returned local-account information without modifying the accounts.*
+
+## Local Sysmon Evidence
+
+Sysmon recorded the controlled child PowerShell process as Process Create Event ID `1`.
+
+The event captured:
+
+- The `powershell.exe` process image
+- The unique marker `SOC-Lab-Scenario4`
+- The read-only `Get-LocalUser` cmdlet
+- The selected account properties
+- The parent PowerShell process
+- The executing user context
+- High integrity level
+- A SHA-256 process hash
+- Local and UTC timestamps
+
+![Sysmon PowerShell local-account discovery event](03-sysmon-powershell-account-discovery.png)
+
+*Figure 3. Sysmon Event ID 1 recorded the controlled PowerShell account-discovery process on ENDPOINT-01. The full command line contained the unique marker `SOC-Lab-Scenario4` and the read-only `Get-LocalUser` cmdlet.*
