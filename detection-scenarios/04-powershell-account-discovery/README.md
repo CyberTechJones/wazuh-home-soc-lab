@@ -65,3 +65,12 @@ The scenario uses a read-only PowerShell command.
 **Status:** In progress
 
 **Current finding:** Prerequisite validation and controlled PowerShell testing are pending.
+
+
+## Prerequisite Validation
+
+Before executing the controlled account-discovery command, I confirmed that `Get-LocalUser` was available and that both Sysmon and the Windows Wazuh agent were running on ENDPOINT-01.
+
+![Scenario 4 prerequisite validation](01-scenario4-prerequisites.png)
+
+*Figure 1. ENDPOINT-01 prerequisite validation confirmed that `Get-LocalUser` was available through the `Microsoft.PowerShell.LocalAccounts` module and that the Sysmon and Wazuh services were running.*
