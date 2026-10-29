@@ -74,3 +74,13 @@ Before executing the controlled account-discovery command, I confirmed that `Get
 ![Scenario 4 prerequisite validation](01-scenario4-prerequisites.png)
 
 *Figure 1. ENDPOINT-01 prerequisite validation confirmed that `Get-LocalUser` was available through the `Microsoft.PowerShell.LocalAccounts` module and that the Sysmon and Wazuh services were running.*
+
+## Controlled PowerShell Activity
+
+I launched a new PowerShell process on ENDPOINT-01 using the unique marker `SOC-Lab-Scenario4` and the read-only `Get-LocalUser` cmdlet.
+
+The command returned local account names, enabled status, and descriptions without modifying account configuration.
+
+![Controlled PowerShell local-account discovery output](02-powershell-get-localuser-output.png)
+
+*Figure 2. The controlled PowerShell process executed `Get-LocalUser` on ENDPOINT-01 using the unique marker `SOC-Lab-Scenario4`. The read-only command returned local-account information without modifying the accounts.*
