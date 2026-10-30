@@ -38,7 +38,7 @@ Each completed scenario documents:
 | [Scenario 1: Sysmon Process-Creation Validation](./01-sysmon-process-creation/README.md) | Complete | Process and telemetry analysis |
 | [Scenario 2: Controlled Failed Windows Logons](./02-failed-windows-logons/README.md) | Complete | Authentication investigation |
 | [Scenario 3: File Integrity Monitoring](./03-file-integrity-monitoring/README.md) | Complete | File-change investigation |
-| Scenario 4: PowerShell Local-Account Discovery | Planned | Command-line and discovery analysis |
+| [Scenario 4: PowerShell Local-Account Discovery](./04-powershell-account-discovery/README.md) | Complete | Command-line and discovery analysis |
 
 ---
 
@@ -162,5 +162,75 @@ Rule `554` detected file additions, rule `550` detected the content modification
 - **Security incident:** No
 
 [View the completed Scenario 3 report](./03-file-integrity-monitoring/README.md)
+
+## Scenario 4: PowerShell Local-Account Discovery
+
+### Objective
+
+Validate whether Sysmon and Wazuh provide visibility into controlled PowerShell execution and local-account discovery on ENDPOINT-01.
+
+### Controlled Activity
+
+Launched a child PowerShell process using the unique marker `SOC-Lab-Scenario4-Retest` and the read-only `Get-LocalUser` cmdlet.
+
+The command returned local account names, enabled states, and descriptions without modifying account configuration.
+
+### Data Sources
+
+- `Microsoft-Windows-Sysmon/Operational`
+- Sysmon Process Create Event ID `1`
+- Windows Wazuh agent telemetry
+- Wazuh Threat Hunting alert
+- Complete PowerShell command line
+- Parent-process information
+
+### Key Result
+
+Sysmon recorded the controlled child PowerShell process as Event ID `1`, including the complete command line, parent process, user context, integrity level, and SHA-256 process hash.
+
+Wazuh received the corresponding event and generated a level `4` alert under rule `92027`, **PowerShell process spawned PowerShell instance**.
+
+The unique marker `SOC-Lab-Scenario4-Retest`, the `Get-LocalUser` cmdlet, process fields, host information, and timestamps confirmed that the local Sysmon event and centralized Wazuh alert represented the same controlled activity.
+
+### MITRE ATT&CK Assessment
+
+Wazuh assigned the following mapping:
+
+- **Tactic:** Execution
+- **Technique:** Command and Scripting Interpreter: PowerShell
+- **Technique ID:** `T1059.001`
+
+The command behavior was also consistent with the following analyst-assessed mapping:
+
+- **Tactic:** Discovery
+- **Technique:** Account Discovery: Local Account
+- **Technique ID:** `T1087.001`
+
+`T1087.001` was an analyst assessment based on the behavior of `Get-LocalUser`. It was not displayed as the Wazuh-assigned mapping for the matching event.
+
+The ATT&CK mappings describe the observed behavior, not malicious intent.
+
+### Skills Demonstrated
+
+- PowerShell process analysis
+- Sysmon Event ID `1` analysis
+- Full command-line review
+- Parent-child process analysis
+- Local-account discovery analysis
+- Endpoint-to-SIEM correlation
+- Wazuh rule validation
+- MITRE ATT&CK assessment
+- Behavior and intent differentiation
+- Benign true-positive classification
+
+### Final Disposition
+
+- **Status:** Complete
+- **Classification:** Authorized benign true positive
+- **Severity:** Low
+- **Confidence:** High
+- **Security incident:** No
+
+[View the completed Scenario 4 report](./04-powershell-account-discovery/README.md)
 
 ---
