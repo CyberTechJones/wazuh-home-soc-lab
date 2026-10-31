@@ -22,8 +22,6 @@ All testing was authorized, non-destructive, and restricted to virtual machines 
 
 ## Architecture
 
-![Wazuh home SOC lab architecture](./architecture/wazuh-home-soc-lab-architecture.png)
-
 | Asset | Operating System | Role |
 |---|---|---|
 | **SIEM-01** | Ubuntu Linux | Wazuh manager, indexer, and dashboard |
